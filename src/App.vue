@@ -1,13 +1,18 @@
 <template>
   <div id="app">
+    <m-header></m-header>
     <router-view/>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'App'
-}
+  import MHeader from '@/components/m-header/m-header'
+  export default {
+    name: 'App',
+    components: {
+      MHeader
+    }
+  }
 </script>
 
 <style scoped lang="stylus">
