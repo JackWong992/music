@@ -1,6 +1,6 @@
 <template>
   <div>
-    Hello world
+    推荐页面
   </div>
 </template>
 
