@@ -1,25 +1,24 @@
-import originJSONP from 'jsonp'
-//试用jsonp做前后端数据交互，封装promise
-export default function jsonp(url, data, option){
+import originJsonp from 'jsonp'
 
-  url+=(url.indexOf('?')<0?'?':'&')+param(data)
+export default function jsonp(url, data, option) {
+  url += (url.indexOf('?') < 0 ? '?' : '&') + param(data)
 
-  return new Promise( (resolve,reject)=>{
-    originJSONP(url, option,(error,data)=>{
-      if(!error){
+  return new Promise((resolve, reject) => {
+    originJsonp(url, option, (err, data) => {
+      if (!err) {
         resolve(data)
-      }else{
+      } else {
         reject(err)
       }
     })
-  } )
+  })
 }
 
-function params(data){
+export function param(data) {
   let url = ''
-  for(var k in data){
-    let value = data[i]!==undefined ? data[k]:''
-    url+=`&${k}=${encodeURIComponent(value)}`
+  for (var k in data) {
+    let value = data[k] !== undefined ? data[k] : ''
+    url += '&' + k + '=' + encodeURIComponent(value)
   }
-  return url?url.substring(1):''
+  return url ? url.substring(1) : ''
 }
