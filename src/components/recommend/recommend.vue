@@ -37,6 +37,9 @@
             </li>
           </ul>
         </div>
+        <div class="loading-container" v-show="!discList.length">
+          <loading></loading>
+        </div>
       </div>
     </scroll>
   </div>
@@ -47,6 +50,7 @@
  import {ERR_OK} from 'api/config'
  import Slider from 'base/slider/slider'
  import Scroll from 'base/scroll/scroll'
+ import Loading from 'base/loading/loading'
  export default {
       data() {
         return {
@@ -89,7 +93,8 @@
         },
       components: {
         Slider,
-        Scroll
+        Scroll,
+        Loading
       }
   }
 </script>
