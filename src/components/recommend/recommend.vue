@@ -1,36 +1,103 @@
 <template>
   <div class="recommend">
-    <div class="recommend-content">
-      <div class="slider-wrapper"></div>
-      <div class="recommend-list">
-        <h1 class="list-title">热门歌单推荐</h1>
-        <ul></ul>
+    <scroll ref="scroll" class="recommend-content" :data="discList">
+        <!-- <div class="slider-wrapper" v-if="recommends.length">
+          <slider>
+            <div v-for="(item,index) in recommends" :key="index">
+              <a :href="item.linkUrl">
+                <img :src="item.picUrl">
+              </a>
+            </div>
+          </slider>
+        </div> -->
+      <div>
+        <swiper :options="swiperOption" style="height: 0; oveflow: hidden; padding-bottom: 40%" v-if="this.recommends.length" >
+        <!-- slides -->
+          <swiper-slide v-for="(item,index) in recommends" :key="index" >
+            <div >
+              <a :href="item.linkUrl">
+                <img  @load="loadImage" :src="item.picUrl" style="width: 100%">
+              </a>
+            </div>
+          </swiper-slide>
+        <!-- Optional controls -->
+          <div class="swiper-pagination"  slot="pagination"></div>
+        </swiper>
+        <div class="recommend-list">
+          <h1 class="list-title">热门歌单推荐</h1>
+          <ul>
+            <li v-for="(item,index) in discList" :key="index" class="item">
+              <div class="icon">
+                <img :src="item.imgurl" width="60" height="60">
+              </div>
+              <div class="text">
+                <h2 class="name">{{item.creator.name}}</h2>
+                <h2 class="desc">{{item.dissname}}</h2>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
+    </scroll>
   </div>
 </template>
 
 <script>
-  import {getRecommend, getDiscList} from 'api/recommend'
-  import {ERR_OK} from 'api/config'
+ import {getRecommend, getDiscList} from 'api/recommend'
+ import {ERR_OK} from 'api/config'
+ import Slider from 'base/slider/slider'
+ import Scroll from 'base/scroll/scroll'
  export default {
-    created() {
-      this._getRecommend()
-    },
-    methods: {
-       _getRecommend() {
-        getRecommend().then((res) => {
-          if (res.code === ERR_OK) {
-            console.log(res.data.slider)
+      data() {
+        return {
+          recommends: [],
+          discList: [],
+          swiperOption: {
+          pagination: '.swiper-pagination',
+          loop: true,
+          autoplay: 3500,
+          },
+        }
+      },
+      created() {
+        this._getRecommend(),
+        this._getDiscList()
+      },
+      methods: {
+        _getRecommend() {
+          getRecommend().then((res) => {
+            if (res.code === ERR_OK) {
+              this.recommends = res.data.slider
+            }
+          })
+        },
+        _getDiscList() {
+          getDiscList().then((res) => {
+            if (res.code === ERR_OK) {
+              this.discList = res.data.list
+                console.log(res)
+              }
+            })
+          },
+        loadImage(){
+          if(!this.checkLoaded){
+            this.$refs.scroll.refresh()
+            this.checkLoaded = true
           }
-        })
+          this.$refs.scroll.refresh()
+        }
+        },
+      components: {
+        Slider,
+        Scroll
       }
-    }
- }
+  }
 </script>
 
 <style scoped lang="stylus">
   @import '~common/stylus/variable'
+  .recommend >>> .swiper-pagination-bullet-active
+    background: white
   .recommend
     position: fixed
     width: 100%
