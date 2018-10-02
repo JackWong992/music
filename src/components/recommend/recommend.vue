@@ -16,7 +16,7 @@
           <swiper-slide v-for="(item,index) in recommends" :key="index" >
             <div >
               <a :href="item.linkUrl">
-                <img  @load="loadImage" :src="item.picUrl" style="width: 100%">
+                <img  @load="loadImage" v-lazy="item.picUrl" style="width: 100%">
               </a>
             </div>
           </swiper-slide>
